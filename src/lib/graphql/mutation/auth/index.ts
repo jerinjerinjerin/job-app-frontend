@@ -36,6 +36,27 @@ export const GOOGLE_LOGIN_USER = gql`
   }
 `;
 
+export const VERIFY_OTP = gql`
+  mutation VerifyOtp($input: OtpInput!) {
+    verifyOtp(input: $input) {
+      accessToken
+      refreshToken
+      user {
+        id
+        email
+        name
+        provider
+        role
+        otp
+        profilePic
+        isValidUser
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
 
 export const REFRESH_TOKEN = gql`
   mutation RefreshToken {
@@ -69,5 +90,17 @@ export const SIGNUP_USER = gql`
     }
   }
 `;
+
+export const UPDATE_USER = gql`
+  mutation UpdateUser($input: updateInput!) {
+    updateUser(input: $input) {
+      message
+      success
+      role
+    }
+  }
+`;
+
+
 
 

@@ -19,10 +19,23 @@ export interface SignUpResponse {
   message: string;
 }
 
+export interface VerifyOtpResponse {
+    verifyOtp: AuthResponse;
+}
+
+export interface UpdateUserResponse {
+  message: string;
+  success: boolean;
+  role: string;
+}
+
 export interface AuthState {
   signUpLoading: boolean;
   signUpError: string | null;
   signUpUser: SignUpResponse | null;
+  verifyLoading: boolean;
+  verifyUser: VerifyOtpResponse | null;
+  verifyError: string | null;
   loading: boolean;
   error: string | null;
   user: AuthResponse | null;
@@ -35,4 +48,7 @@ export interface AuthState {
   userLogOutSuccess: boolean;
   userLogOutLoading: boolean;
   userLogOutError: string | null;
+  updateUserLoading: boolean;
+  updateUserSuccess: UpdateUserResponse | null;
+  updateUserError: string | null;
 }

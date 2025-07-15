@@ -75,37 +75,38 @@ const AuthForm: React.FC<Props> = ({ type = "login" }) => {
       },
   })
 
- const onSubmit = async (data: SignupFormValues | LoginFormValues) => {
-  console.log("✅ Form Data:", data);
+  const onSubmit = async (data: SignupFormValues | LoginFormValues) => {
+    console.log("✅ Form Data:", data);
 
-  try {
-    if (isSignUp) {
-      const signUpFormData = data as SignupFormValues;
-console.log("signUpFormData.profilePic:", signUpFormData.profilePic); 
-      const signupResponse = await dispatch(signupUser(signUpFormData)).unwrap();
+    try {
+      if (isSignUp) {
+        const signUpFormData = data as SignupFormValues;
+        console.log("signUpFormData.profilePic:", signUpFormData.profilePic);
+        const signupResponse = await dispatch(signupUser(signUpFormData)).unwrap();
 
-      if (signupResponse?.success) {
-        toast.success('Registration successful! Check your email for OTP.');
-        router.push('/otp');
+        if (signupResponse?.success) {
+          toast.success('Registration successful! Check your email for OTP.');
+          localStorage.setItem('email',signUpFormData.email )
+          router.push('/otp');
+        }
+      } else {
+        const loginData = data as LoginFormValues;
+
+        const loginResponse = await dispatch(loginUser(loginData)).unwrap();
+
+        if (loginResponse?.user) {
+          toast.success('Login successful');
+          router.push('/');
+        }
       }
-    } else {
-      const loginData = data as LoginFormValues;
+    } catch (error) {
+      console.error("Auth Error:", error);
 
-      const loginResponse = await dispatch(loginUser(loginData)).unwrap();
-
-      if (loginResponse?.user) {
-        toast.success('Login successful');
-        router.push('/');
+      if (typeof error === "string" && error.trim()) {
+        toast.error(error);
       }
     }
-  } catch (error) {
-    console.error("Auth Error:", error);
-
-    if (typeof error === "string" && error.trim()) {
-      toast.error(error);
-    }
-  }
-};
+  };
 
 
   return (

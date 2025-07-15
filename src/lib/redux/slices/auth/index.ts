@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { AuthState } from "@/utils/types";
+import { AuthState } from "@/utils/types/auth";
 
 import {
   loginUser,
@@ -8,9 +8,17 @@ import {
   refreshUserToken,
   logoutUser,
   signupUser,
+  verifyUser,
+  updateUser,
 } from "../../actions/auth";
 
 const initialState: AuthState = {
+  signUpError: null,
+  signUpLoading: false,
+  signUpUser: null,
+  verifyError: null,
+  verifyLoading: false,
+  verifyUser: null,
   loading: false,
   user: null,
   error: null,
@@ -23,9 +31,9 @@ const initialState: AuthState = {
   userLogOutError: null,
   userLogOutLoading: false,
   userLogOutSuccess: false,
-  signUpError: null,
-  signUpLoading: false,
-  signUpUser: null,
+  updateUserError: null,
+  updateUserLoading: false,
+  updateUserSuccess: null,
 };
 
 const authSlice = createSlice({
@@ -39,7 +47,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-    //signup
+      //signup
       .addCase(signupUser.pending, (state) => {
         state.signUpLoading = true;
         state.signUpError = null;
@@ -53,6 +61,22 @@ const authSlice = createSlice({
         state.signUpLoading = false;
         state.signUpUser = null;
         state.signUpError = action.payload || "Login failed";
+      })
+
+      //verify user
+      .addCase(verifyUser.pending, (state) => {
+        state.verifyLoading = true;
+        state.verifyError = null;
+      })
+      .addCase(verifyUser.fulfilled, (state, action) => {
+        state.verifyLoading = false;
+        state.verifyUser = action.payload;
+        state.verifyError = null;
+      })
+      .addCase(verifyUser.rejected, (state, action) => {
+        state.verifyLoading = false;
+        state.verifyUser = null;
+        state.verifyError = action.payload || "Verify failed";
       })
 
       //login
@@ -129,7 +153,25 @@ const authSlice = createSlice({
         state.userLogOutLoading = false;
         state.userLogOutSuccess = false;
         state.userLogOutError = action.payload || "Logout failed";
-      });
+      })
+
+      //update user
+
+       .addCase(updateUser.pending, (state) => {
+        state.updateUserLoading = true;
+        state.updateUserError = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.updateUserLoading = false;
+        state.updateUserSuccess = action.payload;
+        state.updateUserError = null;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.updateUserLoading = false;
+        state.updateUserSuccess = null;
+        state.updateUserError = action.payload || "user update failed";
+      })
+
   },
 });
 
